@@ -1,3 +1,6 @@
+# Copyright 2026 中山大学智能工程学院谭晓军教授课题组
+# SPDX-License-Identifier: Apache-2.0
+
 """Game engine: tick loop, state updates, collision, order generation."""
 
 import json

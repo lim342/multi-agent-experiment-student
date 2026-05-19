@@ -1,3 +1,6 @@
+# Copyright 2026 中山大学智能工程学院谭晓军教授课题组
+# SPDX-License-Identifier: Apache-2.0
+
 """简化版学生代码 — 供应链运输 Demo
 
 策略：贪心响应式。每辆车根据当前状态：

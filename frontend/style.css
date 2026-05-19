@@ -31,12 +31,24 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
+#title-group {
+    display: flex;
+    flex-direction: column;
+}
+
 #title {
     font-size: 22px;
     font-weight: 700;
     color: #e94560;
     white-space: nowrap;
     letter-spacing: 1px;
+}
+
+#subtitle {
+    font-size: 12px;
+    color: #777;
+    white-space: nowrap;
+    margin-top: 2px;
 }
 
 #controls {
