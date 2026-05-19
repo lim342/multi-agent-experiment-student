@@ -4,7 +4,8 @@
     "tick_rate": 30,
     "collision_radius": 1.0,
     "collision_penalty": 5,
-    "zone_interaction_radius": 3.0
+    "zone_interaction_radius": 3.0,
+    "random_seed": 100
   },
   "map": {
     "width": 200,

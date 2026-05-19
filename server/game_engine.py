@@ -31,9 +31,15 @@ def load_map(path: str = "map.json") -> dict:
         return json.load(f)
 
 
-def init_game_state(config: dict, map_data: dict) -> GameState:
+def init_game_state(config: dict, map_data: dict, seed: Optional[int] = None) -> GameState:
     """Initialize game state from config and map data."""
     state = GameState(config=config)
+
+    # Set random seed if provided, otherwise use config value
+    effective_seed = seed if seed is not None else config.get("game", {}).get("random_seed")
+    if effective_seed is not None:
+        random.seed(effective_seed)
+    state.random_seed = effective_seed
 
     # Nodes
     for nid, ndata in map_data["nodes"].items():
@@ -357,4 +363,5 @@ def get_state_snapshot(state: GameState) -> dict:
         "material_rewards": state.material_rewards,
         "collision_penalty": round(state.collision_penalty_total, 2),
         "overtime_penalty": round(state.overtime_penalty_total, 2),
+        "random_seed": state.random_seed,
     }

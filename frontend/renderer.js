@@ -95,6 +95,7 @@ const dropRewardDisplay = document.getElementById('drop-reward-display');
 const orderRewardDisplay = document.getElementById('order-reward-display');
 const collisionDisplay = document.getElementById('collision-display');
 const overtimeDisplay = document.getElementById('overtime-display');
+const seedDisplay = document.getElementById('seed-display');
 const statusDot = document.getElementById('status-dot');
 const statusText = document.getElementById('status-text');
 const ordersList = document.getElementById('orders-list');
@@ -185,6 +186,9 @@ function updateUI() {
 
     // Order reward
     orderRewardDisplay.textContent = (s.completed_orders_value || 0).toFixed(0);
+
+    // Random seed
+    seedDisplay.textContent = s.random_seed != null ? s.random_seed : '-';
 
     // Orders panel
     updateOrdersPanel(s.orders || []);

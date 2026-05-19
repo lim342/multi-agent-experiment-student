@@ -23,9 +23,10 @@ from server.recorder import Recorder
 
 
 class GameServer:
-    def __init__(self, config_path="config.json", map_path="map.json"):
+    def __init__(self, config_path="config.json", map_path="map.json", seed=None):
         self.config = load_config(config_path)
         self.map_data = load_map(map_path)
+        self.seed = seed
         self.state = None
         self.student_ws = None
         self.viewer_ws_set: set = set()
@@ -34,7 +35,7 @@ class GameServer:
         self.recorder = Recorder()
 
     def reset(self):
-        self.state = init_game_state(self.config, self.map_data)
+        self.state = init_game_state(self.config, self.map_data, seed=self.seed)
         self.running = False
         self.game_task = None
 
@@ -237,9 +238,10 @@ def main():
     parser.add_argument("--config", default="config.json", help="Config file path")
     parser.add_argument("--map", default="map.json", help="Map file path")
     parser.add_argument("--recording-port", type=int, default=8766, help="Recording HTTP port")
+    parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducibility (overrides config.json)")
     args = parser.parse_args()
 
-    server = GameServer(config_path=args.config, map_path=args.map)
+    server = GameServer(config_path=args.config, map_path=args.map, seed=args.seed)
     asyncio.run(server.start(host=args.host, port=args.port, recording_port=args.recording_port))
 
 

@@ -271,6 +271,7 @@ class GameState:
     orders: dict[str, Order] = field(default_factory=dict)
     recipes: dict[str, Recipe] = field(default_factory=dict)
     order_counter: int = 0
+    random_seed: Optional[int] = None
     config: dict = field(default_factory=dict)
 
     @property
