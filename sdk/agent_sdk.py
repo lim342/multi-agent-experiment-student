@@ -38,6 +38,14 @@ class AgentSDK:
         self._graph = None
         self._nodes = {}
         self._adjacency = {}
+        self._zone_map = {}       # {zone_id: {"node": ..., "position": [x,y]}}
+        self._map_width = 0
+        self._map_height = 0
+        self._collision_radius = 0.3
+        self._zone_interaction_radius = 0.6
+        self._raw_production_time = 3.0
+        self._recipes = {}
+        self._orders_timeout_base = 45.0
         self._loop = None
         self._running = False
         self._callback = None
@@ -48,6 +56,36 @@ class AgentSDK:
 
     def get_graph(self) -> dict:
         return self._graph or {}
+
+    @property
+    def map_size(self) -> tuple[float, float]:
+        """Map dimensions (width, height) in meters."""
+        return (self._map_width, self._map_height)
+
+    @property
+    def collision_radius(self) -> float:
+        return self._collision_radius
+
+    @property
+    def zone_interaction_radius(self) -> float:
+        return self._zone_interaction_radius
+
+    @property
+    def raw_production_time(self) -> float:
+        return self._raw_production_time
+
+    @property
+    def recipes(self) -> dict:
+        return self._recipes
+
+    @property
+    def orders_timeout_base(self) -> float:
+        return self._orders_timeout_base
+
+    def get_zone_position(self, zone_id: str) -> Optional[list[float]]:
+        """Get zone position [x, y] from the initial graph data."""
+        info = self._zone_map.get(zone_id)
+        return info.get("position") if info else None
 
     # --- Pathfinding ---
 
@@ -217,9 +255,18 @@ class AgentSDK:
         data = json.loads(msg)
         if data.get("type") == "graph_info":
             self._graph = data["data"]
-            self._nodes = self._graph.get("nodes", {})
+            g = self._graph
+            self._nodes = g.get("nodes", {})
+            self._zone_map = g.get("zones", {})
+            self._map_width = g.get("map_width", 0)
+            self._map_height = g.get("map_height", 0)
+            self._collision_radius = g.get("collision_radius", 0.3)
+            self._zone_interaction_radius = g.get("zone_interaction_radius", 0.6)
+            self._raw_production_time = g.get("raw_material_production_time", 3.0)
+            self._recipes = g.get("recipes", {})
+            self._orders_timeout_base = g.get("orders_timeout_base", 45.0)
             self._adjacency = {}
-            for edge in self._graph.get("edges", []):
+            for edge in g.get("edges", []):
                 self._adjacency.setdefault(edge["from"], []).append(
                     (edge["to"], edge["distance"])
                 )
