@@ -1,0 +1,33 @@
+{
+  "game": {
+    "duration": 300,
+    "tick_rate": 30,
+    "collision_radius": 1.0,
+    "collision_penalty": 5,
+    "zone_interaction_radius": 3.0
+  },
+  "map": {
+    "width": 200,
+    "height": 200,
+    "map_file": "map.json",
+    "background_image": "data.png"
+  },
+  "vehicles": {
+    "count": 10,
+    "speed": 20,
+    "start_nodes": ["n104", "n21", "n153", "n30", "n41","n38","n93","n105","n57","n121"]
+  },
+  "orders": {
+    "check_interval": 2.0,
+    "generation_probability": 1,
+    "timeout_base": 80.0,
+    "overtime_penalty_rate": 0.5
+  },
+  "raw_materials": {
+    "production_time": 10.0,
+    "max_stock": 2
+  },
+  "processing": {
+    "max_queue": 3
+  }
+}

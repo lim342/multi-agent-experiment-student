@@ -1,0 +1,6 @@
+__pycache__/
+.claude/
+docs/
+recordings/
+CLAUDE.md
+tools/

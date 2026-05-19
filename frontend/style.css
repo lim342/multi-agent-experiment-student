@@ -1,0 +1,279 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    overflow: hidden;
+    height: 100vh;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* ── Header ── */
+
+#header {
+    display: flex;
+    align-items: center;
+    padding: 8px 24px;
+    background: linear-gradient(180deg, #1c2541 0%, #16213e 100%);
+    border-bottom: 1px solid #0f3460;
+    gap: 24px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+#title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e94560;
+    white-space: nowrap;
+    letter-spacing: 1px;
+}
+
+#controls {
+    display: flex;
+    gap: 10px;
+}
+
+#controls button {
+    padding: 7px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+}
+
+#btn-start {
+    background: #0f3460;
+    color: #e0e0e0;
+}
+
+#btn-start:not(:disabled):hover {
+    background: #e94560;
+    color: white;
+    box-shadow: 0 2px 8px rgba(233,69,96,0.4);
+}
+
+#btn-start:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#btn-reset {
+    background: #333;
+    color: #aaa;
+}
+
+#btn-reset:hover {
+    background: #555;
+    color: white;
+}
+
+#score-board {
+    display: flex;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 4px 14px;
+    min-width: 70px;
+}
+
+.score-item .label {
+    font-size: 12px;
+    color: #777;
+    letter-spacing: 0.5px;
+}
+
+.score-item .value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #4ecca3;
+}
+
+.score-item.penalty .value {
+    color: #e94560;
+}
+
+#status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: #888;
+}
+
+#status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #666;
+    box-shadow: 0 0 6px currentColor;
+}
+
+#status-dot.waiting { background: #f39c12; box-shadow: 0 0 8px #f39c12; }
+#status-dot.ready { background: #4ecca3; box-shadow: 0 0 8px #4ecca3; }
+#status-dot.running { background: #4ecca3; box-shadow: 0 0 8px #4ecca3; animation: pulse 1s infinite; }
+#status-dot.ended { background: #e94560; box-shadow: 0 0 8px #e94560; }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ── Main Layout ── */
+
+#main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ── Shared Sidebar Styles ── */
+
+#left-sidebar,
+#sidebar {
+    width: 340px;
+    background: linear-gradient(180deg, #16213e 0%, #131b30 100%);
+    overflow-y: auto;
+    padding: 16px;
+    flex-shrink: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#left-sidebar::-webkit-scrollbar,
+#sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+#left-sidebar {
+    border-right: 1px solid #0f3460;
+}
+
+#sidebar {
+    border-left: 1px solid #0f3460;
+}
+
+#left-sidebar > div,
+#sidebar > div {
+    margin-bottom: 20px;
+}
+
+#left-sidebar h3,
+#sidebar h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e94560;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0f3460;
+    letter-spacing: 1px;
+}
+
+/* ── Panel Items ── */
+
+.panel-item {
+    background: #1a1a2e;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+    border-left: 3px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.panel-item:hover {
+    background: #1e2245;
+}
+
+.panel-item .item-title {
+    font-weight: 600;
+    color: #4ecca3;
+    margin-bottom: 2px;
+}
+
+.panel-item .item-detail {
+    color: #999;
+}
+
+.panel-item.warning {
+    border-left-color: #f39c12;
+}
+
+.panel-item.warning .item-title {
+    color: #f39c12;
+}
+
+.panel-item.danger {
+    border-left-color: #e94560;
+}
+
+.panel-item.danger .item-title {
+    color: #e94560;
+}
+
+/* ── Progress Bar ── */
+
+.progress-bar {
+    height: 6px;
+    background: #2a2a3e;
+    border-radius: 3px;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+.progress-bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4ecca3, #38b28a);
+    border-radius: 3px;
+    transition: width 0.1s linear;
+}
+
+/* ── Material Tags ── */
+
+.material-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 2px;
+    font-weight: 500;
+}
+
+.material-tag.have { background: #0f3460; color: #4ecca3; }
+.material-tag.missing { background: #2a2a3e; color: #555; }
+
+/* ── Canvas ── */
+
+#canvas-container {
+    flex: 1;
+    display: block;
+    background: #0a0a1a;
+    overflow: hidden;
+}
+
+#game-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验回放 - 多智能体供应链协同实验</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #replay-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #replay-controls select,
+        #replay-controls button {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        #recording-select {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border: 1px solid #0f3460;
+            min-width: 220px;
+            max-width: 320px;
+        }
+        #btn-play {
+            background: #0f3460;
+            color: #e0e0e0;
+            min-width: 70px;
+        }
+        #btn-play:hover { background: #e94560; color: white; }
+        #speed-select {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border: 1px solid #0f3460;
+        }
+        #scrubber {
+            flex: 1;
+            min-width: 100px;
+            max-width: 400px;
+            cursor: pointer;
+        }
+        #replay-time {
+            font-size: 14px;
+            color: #aaa;
+            white-space: nowrap;
+            font-family: monospace;
+        }
+        .nav-link {
+            color: #4ecca3;
+            text-decoration: none;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .nav-link:hover { color: #e94560; }
+        #btn-fit-replay {
+            background: #333;
+            color: #aaa;
+        }
+        #btn-fit-replay:hover { background: #555; color: white; }
+        .replay-status {
+            font-size: 13px;
+            color: #777;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="header">
+            <div id="title">实验回放</div>
+            <div id="replay-controls">
+                <select id="recording-select">
+                    <option value="">选择录像...</option>
+                </select>
+                <button id="btn-play" disabled>播放</button>
+                <select id="speed-select">
+                    <option value="1">1x</option>
+                    <option value="2">2x</option>
+                    <option value="4">4x</option>
+                    <option value="8">8x</option>
+                </select>
+                <input type="range" id="scrubber" min="0" max="0" value="0" disabled>
+                <span id="replay-time">0.0s / 0.0s</span>
+                <button id="btn-fit-replay">适应屏幕</button>
+                <a href="index.html" class="nav-link">实时观看</a>
+            </div>
+            <div id="score-board">
+                <div class="score-item">
+                    <span class="label">时间</span>
+                    <span id="time-display" class="value">0.0s</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">得分</span>
+                    <span id="score-display" class="value">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">完成订单</span>
+                    <span id="completed-display" class="value">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">订单收益</span>
+                    <span id="order-reward-display" class="value">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">投递收益</span>
+                    <span id="drop-reward-display" class="value">0</span>
+                </div>
+                <div class="score-item penalty">
+                    <span class="label">碰撞扣分</span>
+                    <span id="collision-display" class="value">0</span>
+                </div>
+                <div class="score-item penalty">
+                    <span class="label">超时扣分</span>
+                    <span id="overtime-display" class="value">0</span>
+                </div>
+            </div>
+            <span id="replay-status-text" class="replay-status"></span>
+        </div>
+        <div id="main">
+            <div id="left-sidebar">
+                <div id="panel-orders">
+                    <h3>订单面板</h3>
+                    <div id="orders-list"></div>
+                </div>
+                <div id="panel-processing">
+                    <h3>加工区状态</h3>
+                    <div id="processing-list"></div>
+                </div>
+            </div>
+            <div id="canvas-container">
+                <canvas id="game-canvas"></canvas>
+            </div>
+            <div id="sidebar">
+                <div id="panel-vehicles">
+                    <h3>车辆状态</h3>
+                    <div id="vehicles-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>window.REPLAY_MODE = true;</script>
+    <script src="renderer.js"></script>
+    <script src="replay.js"></script>
+</body>
+</html>
