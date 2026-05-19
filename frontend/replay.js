@@ -222,26 +222,30 @@ document.addEventListener('drop', async (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (!file || !file.name.endsWith('.json')) return;
-    const text = await file.text();
-    recording = JSON.parse(text);
-    recordingSelect.value = '';
+    try {
+        const text = await file.text();
+        recording = JSON.parse(text);
+        recordingSelect.value = '';
 
-    graphInfo = recording.graph_info;
-    collisionRadius = graphInfo.collision_radius || 0.3;
-    interactionRadius = graphInfo.zone_interaction_radius || 3.0;
-    computeViewTransform();
-    loadBackgroundImage();
+        graphInfo = recording.graph_info;
+        collisionRadius = graphInfo.collision_radius || 0.3;
+        interactionRadius = graphInfo.zone_interaction_radius || 3.0;
+        computeViewTransform();
+        loadBackgroundImage();
 
-    frameIndex = 0;
-    playing = false;
-    btnPlay.textContent = '播放';
-    btnPlay.disabled = false;
-    scrubber.max = recording.frames.length - 1;
-    scrubber.value = 0;
-    scrubber.disabled = false;
+        frameIndex = 0;
+        playing = false;
+        btnPlay.textContent = '播放';
+        btnPlay.disabled = false;
+        scrubber.max = recording.frames.length - 1;
+        scrubber.value = 0;
+        scrubber.disabled = false;
 
-    showFrame(0);
-    replayStatus.textContent = `已加载: ${recording.frames.length} 帧, ${recording.commands.length} 条指令 (本地文件)`;
+        showFrame(0);
+        replayStatus.textContent = `已加载: ${recording.frames.length} 帧, ${recording.commands.length} 条指令 (本地文件)`;
+    } catch (e) {
+        replayStatus.textContent = '加载失败: ' + e.message;
+    }
 });
 
 // --- Init ---

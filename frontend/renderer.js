@@ -162,12 +162,12 @@ function updateStatusUI(status) {
         ended: '游戏结束',
     };
     updateStatus(status, labels[status] || status);
-    btnStart.disabled = status !== 'ready';
+    if (btnStart) btnStart.disabled = status !== 'ready';
 }
 
 function updateStatus(dotClass, text) {
-    statusDot.className = dotClass;
-    statusText.textContent = text;
+    if (statusDot) statusDot.className = dotClass;
+    if (statusText) statusText.textContent = text;
 }
 
 // --- UI Updates ---
@@ -191,7 +191,7 @@ function updateUI() {
     orderRewardDisplay.textContent = (s.completed_orders_value || 0).toFixed(0);
 
     // Random seed
-    seedDisplay.textContent = s.random_seed != null ? s.random_seed : '-';
+    if (seedDisplay) seedDisplay.textContent = s.random_seed != null ? s.random_seed : '-';
 
     // Orders panel
     updateOrdersPanel(s.orders || []);

@@ -81,6 +81,8 @@ class Recorder:
 
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(recording, f, ensure_ascii=False)
+            f.flush()
+            os.fsync(f.fileno())
 
         print(f"[Recorder] Saved {len(self.frames)} frames, "
               f"{len(self.commands)} commands to {filepath}")
@@ -130,7 +132,13 @@ class Recorder:
                     self._send_json(writer, 404, {"error": "Not found"})
                     return
                 with open(filepath, "r", encoding="utf-8") as f:
-                    data = f.read().encode("utf-8")
+                    raw = f.read()
+                try:
+                    json.loads(raw)
+                except json.JSONDecodeError:
+                    self._send_json(writer, 500, {"error": "Corrupted recording file"})
+                    return
+                data = raw.encode("utf-8")
                 writer.write(
                     b"HTTP/1.1 200 OK\r\n"
                     b"Content-Type: application/json\r\n"
