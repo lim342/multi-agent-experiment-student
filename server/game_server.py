@@ -26,10 +26,11 @@ from server.recorder import Recorder
 
 
 class GameServer:
-    def __init__(self, config_path="config.json", map_path="map.json", seed=None):
+    def __init__(self, config_path="config.json", map_path="map.json", seed=None, time_scale=1.0):
         self.config = load_config(config_path)
         self.map_data = load_map(map_path)
         self.seed = seed
+        self.time_scale = time_scale
         self.state = None
         self.student_ws = None
         self.viewer_ws_set: set = set()
@@ -92,7 +93,7 @@ class GameServer:
                 traceback.print_exc()
                 break
 
-            await asyncio.sleep(dt)
+            await asyncio.sleep(dt / self.time_scale if self.time_scale >= 1.0 else dt)
 
         self.running = False
         final = get_state_snapshot(self.state)
@@ -242,9 +243,10 @@ def main():
     parser.add_argument("--map", default="map.json", help="Map file path")
     parser.add_argument("--recording-port", type=int, default=8766, help="Recording HTTP port")
     parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducibility (overrides config.json)")
+    parser.add_argument("--speed", type=float, default=1.0, help="Simulation speed multiplier (1.0=real-time, 10.0=10x)")
     args = parser.parse_args()
 
-    server = GameServer(config_path=args.config, map_path=args.map, seed=args.seed)
+    server = GameServer(config_path=args.config, map_path=args.map, seed=args.seed, time_scale=args.speed)
     asyncio.run(server.start(host=args.host, port=args.port, recording_port=args.recording_port))
 
 
